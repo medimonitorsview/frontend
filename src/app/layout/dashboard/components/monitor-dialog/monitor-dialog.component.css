@@ -1,0 +1,65 @@
+.close {
+  color: white;
+}
+.close.mat-button {
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  line-height: 14px;
+  min-width: auto;
+}
+
+h1{
+background:  #222;
+font-weight: bold;
+color: white;
+
+}
+
+::ng-deep.mat-dialog-container {
+  /* resize: both;  */
+  overflow: auto;
+  /* background: #fff; */
+  border: 1px solid red;
+}
+
+.alert_msg{
+  width: 100%;
+  text-align: left;
+  color: rgb(6,234,251);
+
+  border-radius: 5px;
+  direction: rtl;
+}
+
+[mat-dialog-title] {
+  margin: -24px -24px 0px -24px !important;
+  padding: 10px 24px;
+  cursor: move;
+  text-align: center;
+}
+
+.device_table{
+  width: 100%;
+  text-align: left;
+}
+
+.line {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.device_header{
+  color: yellow;
+  width: 40%;
+}
+
+img {
+  cursor: pointer;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
+}

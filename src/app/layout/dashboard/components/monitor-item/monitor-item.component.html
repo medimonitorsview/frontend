@@ -1,0 +1,176 @@
+
+<mat-card class="item-card" [id]='patient.getPatientId()' >
+<div class="item_div" *ngIf="patient" style="cursor: pointer;" (contextmenu)="onContextMenu($event, patient)">
+    <table class='item_header'>
+    <!-- <tr><td >מיטה</td></tr> -->
+<tr><td style="font-size:200%;" class="header" [ngStyle]="{color:getColorFromBool(patient.checkTotalThresholds())}"><b>{{patient.getRoom()}}</b></td></tr>
+    
+    <tr><td dir="rtl">{{patient.getPatientId().substring(0, 10)}}</td></tr>
+    <!-- <tr><td colspan="2" style="text-align:center;line-height: 25px"><b>{{monitor.monitorId}}</b></td></tr> -->
+    
+    <!-- <tr><td>___________________</td></tr> -->
+    </table>
+    <hr class="solid">
+    <table class='icons'>
+        <tr>
+            <td><img src="../../../../../assets/images/ivac.PNG" width="25px" height="25px"  *ngIf="patient.getIvac() && !timeService.checkValidTimestamp(patient.getIvac().getTimestamp())"></td>
+            <td><img src="../../../../../assets/images/respirator.PNG" width="25px" height="25px"  *ngIf="patient.getRespirator() && !timeService.checkValidTimestamp(patient.getRespirator().getTimestamp())"></td>
+            <td><img src="../../../../../assets/images/monitor.PNG" width="25px" height="25px"  *ngIf="patient.getMonitor() && !timeService.checkValidTimestamp(patient.getMonitor().getTimestamp())"></td>
+        </tr>
+    </table>
+
+    <div class="alert_div" *ngIf="patient.getMonitor(); else monitor_not_exists">
+        <table class = "item_footer" *ngIf="timeService.checkValidTimestamp(patient.getMonitor().getTimestamp()); else alert">
+
+        <tr *ngIf="patient.getMonitor().heart_rate == null ; else zero_hr"><td>HR</td><td [ngStyle]="{'color':getColorFromBool(false)}"><b> - - - - </b></td></tr>
+
+        <ng-template #zero_hr>
+            <tr *ngIf="patient.getMonitor().heart_rate =='0'; else real_hr"><td>HR</td><td>- - - -</td></tr>
+        </ng-template>
+
+        <ng-template #real_hr>
+            <tr><td>HR</td><td [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                patient.getMonitor().heart_rate,
+                patient.getMonitor().thresholds['heart_rate']['min'],
+                patient.getMonitor().thresholds['heart_rate']['max']))}">{{patient.getMonitor().heart_rate}}</td></tr>
+        </ng-template>
+
+
+
+
+        <tr>
+            <td>IBP</td>
+            <td>
+                <table class="hidden">
+                    <tr><td>
+                        <div *ngIf="patient.getMonitor().ibp_systole == null ; else zero_ibp_sys" [ngStyle]="{'color':getColorFromBool(false)}"><b>- -</b></div>
+
+                        <ng-template #zero_ibp_sys>
+                            <div *ngIf="patient.getMonitor().ibp_systole =='0'; else real_ibp_sys" >- -</div>
+                        </ng-template>
+
+                        <ng-template #real_ibp_sys>
+                            <div [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().ibp_systole,
+                                patient.getMonitor().thresholds['ibp']['left']['min'],
+                                patient.getMonitor().thresholds['ibp']['left']['max']))}">{{patient.getMonitor().ibp_systole}}</div>
+                        </ng-template></td>
+                        /<td>
+                        <div *ngIf="patient.getMonitor().ibp_diastole == null ; else zero_ibp_dia" [ngStyle]="{'color':getColorFromBool(false)}"><b>- -</b></div>
+
+                        <ng-template #zero_ibp_dia>
+                            <div *ngIf="patient.getMonitor().ibp_diastole =='0'; else real_ibp_dia" >- -</div>
+                        </ng-template>
+
+                        <ng-template #real_ibp_dia>
+                            <div [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().ibp_diastole,
+                                patient.getMonitor().thresholds['ibp']['right']['min'],
+                                patient.getMonitor().thresholds['ibp']['right']['max']))}">{{patient.getMonitor().ibp_diastole}}</div>
+                        </ng-template>
+                    </td></tr>
+                </table>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>NIBP</td>
+            <td>
+                <table class="hidden"><tr><td>
+                <div *ngIf="patient.getMonitor().nibp_systole == null ; else zero_nibp_sys" [ngStyle]="{'color':getColorFromBool(false)}"><b>- -</b></div>
+
+                <ng-template #zero_nibp_sys>
+                    <div *ngIf="patient.getMonitor().nibp_systole =='0'; else real_nibp_sys" >- -</div>
+                </ng-template>
+
+                <ng-template #real_nibp_sys>
+                    <div [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                        patient.getMonitor().nibp_systole,
+                        patient.getMonitor().thresholds['nibp']['left']['min'],
+                        patient.getMonitor().thresholds['nibp']['left']['max']))}">{{patient.getMonitor().nibp_systole}}</div>
+                </ng-template></td>
+                /<td>
+                <div *ngIf="patient.getMonitor().nibp_diastole == null ; else zero_nibp_dia" [ngStyle]="{'color':getColorFromBool(false)}"><b>- -</b></div>
+
+                <ng-template #zero_nibp_dia>
+                    <div *ngIf="patient.getMonitor().nibp_diastole =='0'; else real_nibp_dia" >- -</div>
+                </ng-template>
+
+                <ng-template #real_nibp_dia>
+                    <div [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                        patient.getMonitor().nibp_diastole,
+                        patient.getMonitor().thresholds['nibp']['right']['min'],
+                        patient.getMonitor().thresholds['nibp']['right']['max']))}">{{patient.getMonitor().nibp_diastole}}</div>
+                </ng-template>
+            </td></tr></table>
+            </td>
+        </tr>
+
+
+        <tr *ngIf="patient.getMonitor().spo2 == null ; else zero_spo2"><td>SpO2</td><td [ngStyle]="{'color':getColorFromBool(false)}"><b> - - - - </b></td></tr>
+
+        <ng-template #zero_spo2>
+            <tr *ngIf="patient.getMonitor().spo2 =='0'; else real_spo2"><td>SpO2</td><td>- - - -</td></tr>
+        </ng-template>
+
+        <ng-template #real_spo2>
+            <tr><td>SpO2</td><td [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                patient.getMonitor().spo2,
+                patient.getMonitor().thresholds['spo2']['min'],
+                patient.getMonitor().thresholds['spo2']['max']))}">{{patient.getMonitor().spo2}}</td></tr>
+        </ng-template>
+
+
+        <tr *ngIf="patient.getMonitor().etco2 == null ; else zero_etco2"><td>EtcO2</td><td [ngStyle]="{'color':getColorFromBool(false)}"><b> - - - - </b></td></tr>
+
+        <ng-template #zero_etco2>
+            <tr *ngIf="patient.getMonitor().etco2 =='0'; else real_etco2"><td>EtcO2</td><td>- - - -</td></tr>
+        </ng-template>
+
+        <ng-template #real_etco2>
+            <tr><td>EtcO2</td><td [ngStyle]="{'color':getColorFromBool(patient.getMonitor().check_thresholds(
+                patient.getMonitor().etco2,
+                patient.getMonitor().thresholds['etco2']['min'],
+                patient.getMonitor().thresholds['etco2']['max']))}">{{patient.getMonitor().etco2}}</td></tr>
+        </ng-template>
+
+        </table>
+        <ng-template #alert>
+            <div dir="rtl" class="alert_msg"> 
+               נתוני המוניטור אינם עדכניים.
+               
+            </div>
+        </ng-template>
+    </div>
+    <ng-template #monitor_not_exists>
+        <div  dir="rtl" class="monitor_not_exists"> 
+                אין מוניטור מחובר
+        </div>
+    </ng-template>
+
+
+    
+    
+</div>
+
+</mat-card>
+
+<div style="visibility: hidden; position: fixed;"
+    [style.left]="contextMenuPosition.x"
+    [style.top]="contextMenuPosition.y"
+    [matMenuTriggerFor]="contextMenu">
+</div>
+
+<mat-menu class="mat-menu" #contextMenu="matMenu">
+    <ng-template matMenuContent let-item="patient">
+        <div class="item_header"><u>מחק פציאנט</u></div>
+        <button *ngIf='patient' mat-menu-item (click)="onContextMenuDeletePatient(patient)">{{patient.getPatientId()}}</button>
+        <hr class=dashed>
+        <div class="item_header"><u>מחק מכשיר</u></div>
+		<button *ngIf='patient.hasMonitor()' mat-menu-item (click)="onContextMenuDeleteDevice(patient.getMonitor())">מוניטור</button>
+        <button *ngIf='patient.hasRespirator()' mat-menu-item (click)="onContextMenuDeleteDevice(patient.getRespirator())">מנשם</button>
+        <button *ngIf='patient.hasIvac()' mat-menu-item (click)="onContextMenuDeleteDevice(patient.getIvac())">IVAC</button>
+
+	</ng-template>
+</mat-menu>

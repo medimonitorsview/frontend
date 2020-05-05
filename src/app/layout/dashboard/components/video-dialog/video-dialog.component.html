@@ -1,0 +1,10 @@
+
+
+<div class=header mat-dialog-title mat-dialog-draggable-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle> {{deviceId}}
+    <button class="close" mat-button mat-dialog-close>X</button>
+</div>
+
+<img  class='image' [useCache]="false" [src]="url" *ngIf="loaded">
+<mat-spinner class="spinner" *ngIf="!loaded"></mat-spinner>
+<mat-checkbox class="example-margin" *ngIf="enable_ocr_checkbox" [(ngModel)]="checked">Show OCR</mat-checkbox>
+

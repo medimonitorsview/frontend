@@ -1,0 +1,332 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<button class="close" mat-button mat-dialog-close>X</button>
+
+<h1 dir=rtl mat-dialog-title mat-dialog-draggable-title cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+        חדר  {{patient.getRoom()}}  / {{patient.getPatientId()}} 
+</h1>
+
+<!-- =============================================================== MONITOR =================================================================================== -->
+
+<table class="device_table" *ngIf="patient.getMonitor()">
+        <tr><td colspan=5><hr class="solid"></td></tr>
+        <div *ngIf="!timeService.checkValidTimestamp(patient.getMonitor().getTimestamp()); else regular_monitor_view">
+                <tr><td class='device_header'>Monitor <img src="../../../../../assets/images/monitor.PNG" width="20px" height="20px"></td></tr>
+                <tr class="alert_msg"><td>נתוני המוניטור אינם עדכניים</td></tr>
+        </div>
+        <ng-template #regular_monitor_view>
+                <tr><td class='device_header'>Monitor<img *ngIf="patient.getMonitor() && timeService.checkValidTimestamp(patient.getMonitor().getTimestamp())" src="../../../../../assets/images/connected.png" width="20px" height="20px"></td>
+                        <td colspan="3" style="text-align: right;"><img src="../../../../../assets/images/camera.png" width="20px" height="15px" (click)="PopupDeviceImage(patient.getMonitor().getDeviceId())"></td></tr>
+                <tr>
+                        <td>HR</td><td *ngIf="patient.getMonitor().heart_rate == null ; else zero_hr" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_hr>
+                        <td *ngIf="patient.getMonitor().heart_rate =='0'; else real_hr">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_hr>
+                        <td [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().heart_rate,
+                                patient.getMonitor().thresholds['heart_rate']['min'],
+                                patient.getMonitor().thresholds['heart_rate']['max']))}">{{patient.getMonitor().heart_rate}}</td>
+                        </ng-template>
+
+
+                        <td>SpO2</td><td *ngIf="patient.getMonitor().spo2 == null ; else zero_spo2" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_spo2>
+                                <td *ngIf="patient.getMonitor().spo2 =='0'; else real_spo2" >- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_spo2>
+                        <td [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().spo2,
+                                patient.getMonitor().thresholds['spo2']['min'],
+                                patient.getMonitor().thresholds['spo2']['max']))}">{{patient.getMonitor().spo2}}</td>
+                        </ng-template>
+
+                </tr>
+                <tr>
+                        <td>IBP</td>
+                        <td>
+                        <table class="hidden"><tr><td>
+                        <div *ngIf="patient.getMonitor().ibp_systole == null ; else zero_ibp_sys" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b>- -</b></div>
+        
+                        <ng-template #zero_ibp_sys>
+                                <div *ngIf="patient.getMonitor().ibp_systole =='0'; else real_ibp_sys" >- -</div>
+                        </ng-template>
+        
+                        <ng-template #real_ibp_sys>
+                                <div [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().ibp_systole,
+                                patient.getMonitor().thresholds['ibp']['left']['min'],
+                                patient.getMonitor().thresholds['ibp']['left']['max']))}">{{patient.getMonitor().ibp_systole}}</div>
+                        </ng-template></td>
+                        /<td>
+                        <div *ngIf="patient.getMonitor().ibp_diastole == null ; else zero_ibp_dia" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b>- -</b></div>
+        
+                        <ng-template #zero_ibp_dia>
+                                <div *ngIf="patient.getMonitor().ibp_diastole =='0'; else real_ibp_dia" >- -</div>
+                        </ng-template>
+        
+                        <ng-template #real_ibp_dia>
+                                <div [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().ibp_diastole,
+                                patient.getMonitor().thresholds['ibp']['right']['min'],
+                                patient.getMonitor().thresholds['ibp']['right']['max']))}">{{patient.getMonitor().ibp_diastole}}</div>
+                        </ng-template>
+                        </td></tr></table>
+                        </td>
+
+
+                        <td>EtcO2</td><td *ngIf="patient.getMonitor().etco2 == null ; else zero_etco2" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_etco2>
+                        <td *ngIf="patient.getMonitor().etco2 =='0'; else real_etco2">- - - -</td>
+                        </ng-template>
+
+                        <ng-template #real_etco2>
+                        <td [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().etco2,
+                                patient.getMonitor().thresholds['etco2']['min'],
+                                patient.getMonitor().thresholds['etco2']['max']))}">{{patient.getMonitor().etco2}}</td>
+                        </ng-template>
+
+                </tr>
+                <tr>
+                        <td>NIBP</td>
+                        <td>
+                                <table class="hidden"><tr><td>
+                                <div *ngIf="patient.getMonitor().nibp_systole == null ; else zero_nibp_sys" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b>- -</b></div>
+                
+                                <ng-template #zero_nibp_sys>
+                                <div *ngIf="patient.getMonitor().nibp_systole =='0'; else real_nibp_sys" >- -</div>
+                                </ng-template>
+                
+                                <ng-template #real_nibp_sys>
+                                <div [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                        patient.getMonitor().nibp_systole,
+                                        patient.getMonitor().thresholds['nibp']['left']['min'],
+                                        patient.getMonitor().thresholds['nibp']['left']['max']))}">{{patient.getMonitor().nibp_systole}}</div>
+                                </ng-template></td>
+                                /<td>
+                                <div *ngIf="patient.getMonitor().nibp_diastole == null ; else zero_nibp_dia" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b>- -</b></div>
+                
+                                <ng-template #zero_nibp_dia>
+                                <div *ngIf="patient.getMonitor().nibp_diastole =='0'; else real_nibp_dia" >-</div>
+                                </ng-template>
+                
+                                <ng-template #real_nibp_dia>
+                                <div [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                        patient.getMonitor().nibp_diastole,
+                                        patient.getMonitor().thresholds['nibp']['right']['min'],
+                                        patient.getMonitor().thresholds['nibp']['right']['max']))}">{{patient.getMonitor().nibp_diastole}}</div>
+                                </ng-template>
+                        </td></tr></table>
+                        </td>
+
+
+                        <td>Temp.</td><td *ngIf="patient.getMonitor().temp == null ; else zero_temp" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_temp>
+                        <td *ngIf="patient.getMonitor().temp =='0'; else real_temp">- - - -</td>
+                        </ng-template>
+
+                        <ng-template #real_temp>
+                        <td [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                                patient.getMonitor().temp,
+                                patient.getMonitor().thresholds['temp']['min'],
+                                patient.getMonitor().thresholds['temp']['max']))}">{{patient.getMonitor().temp}}</td>
+                        </ng-template>
+        
+
+                </tr>
+                <td>RR</td><td *ngIf="patient.getMonitor().rr == null ; else zero_rr" [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                <ng-template #zero_rr>
+                <td *ngIf="patient.getMonitor().rr =='0'; else real_rr">- - - -</td>
+                </ng-template>
+
+                <ng-template #real_rr>
+                <td [ngStyle]="{'color':patient.getMonitor().getColorFromBoolean(patient.getMonitor().check_thresholds(
+                        patient.getMonitor().rr,
+                        patient.getMonitor().thresholds['rr']['min'],
+                        patient.getMonitor().thresholds['rr']['max']))}">{{patient.getMonitor().rr}}</td>
+                </ng-template>
+                
+        </ng-template>
+</table>
+
+<!-- ============================================================== RESPIRATOR ======================================================================== -->
+
+
+<table class="device_table" *ngIf="patient.getRespirator()">
+        <tr><td colspan=5><hr class="solid"></td></tr>
+        <div *ngIf="!timeService.checkValidTimestamp(patient.getRespirator().getTimestamp()); else regular_respirator_view">
+                <tr><td class='device_header'>Respirator <img src="../../../../../assets/images/respirator.PNG" width="20px" height="20px"></td></tr>
+                <tr class="alert_msg"><td>נתוני המנשם אינם עדכניים</td></tr>
+        </div>
+        <ng-template #regular_respirator_view>
+                
+                <tr><td class='device_header'>Respirator <img *ngIf="patient.getRespirator() && timeService.checkValidTimestamp(patient.getRespirator().getTimestamp())" src="../../../../../assets/images/connected.png" width="20px" height="20px"></td><td colspan="3" style="text-align: right;"><img src="../../../../../assets/images/camera.png" width="20px" height="15px" (click)="PopupDeviceImage(patient.getRespirator().getDeviceId())" ></td></tr>
+                <tr>
+                        <td>Ventilation Mode</td><td *ngIf="patient.getRespirator().breathing_method == null ; else zero_breathing" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_breathing>
+                        <td *ngIf="patient.getRespirator().breathing_method =='0'; else real_breathing">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_breathing>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().breathing_method,
+                                patient.getRespirator().thresholds['breathing_method']['min'],
+                                patient.getRespirator().thresholds['breathing_method']['max']))}">{{patient.getRespirator().breathing_method}}</td>
+                        </ng-template>
+                        
+                        
+                </tr>
+                <tr>
+
+                        <td>FIO2</td><td *ngIf="patient.getRespirator().fio2 == null ; else zero_fio2" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_fio2>
+                        <td *ngIf="patient.getRespirator().fio2 =='0'; else real_fio2">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_fio2>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().fio2,
+                                patient.getRespirator().thresholds['fio2']['min'],
+                                patient.getRespirator().thresholds['fio2']['max']))}">{{patient.getRespirator().fio2}}</td>
+                        </ng-template>
+
+                        <td>PEEP</td><td *ngIf="patient.getRespirator().peep == null ; else zero_peep" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_peep>
+                        <td *ngIf="patient.getRespirator().peep =='0'; else real_peep">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_peep>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().peep,
+                                patient.getRespirator().thresholds['peep']['min'],
+                                patient.getRespirator().thresholds['peep']['max']))}">{{patient.getRespirator().peep}}</td>
+                        </ng-template>
+
+                        
+                </tr>
+                <tr>
+
+                        
+                        <td>Tidal Vol.</td><td *ngIf="patient.getRespirator().tidal_volume == null ; else zero_tidal_volume" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_tidal_volume>
+                        <td *ngIf="patient.getRespirator().tidal_volume =='0'; else real_tidal_volume">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_tidal_volume>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().tidal_volume,
+                                patient.getRespirator().thresholds['tidal_volume']['min'],
+                                patient.getRespirator().thresholds['tidal_volume']['max']))}">{{patient.getRespirator().tidal_volume}}</td>
+                        </ng-template>
+
+
+                        <td>Expiratory Tidal Vol.</td><td *ngIf="patient.getRespirator().expiratory_tidal_volume == null ; else zero_expiratory_tidal_volume" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_expiratory_tidal_volume>
+                        <td *ngIf="patient.getRespirator().expiratory_tidal_volume =='0'; else real_expiratory_tidal_volume">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_expiratory_tidal_volume>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().expiratory_tidal_volume,
+                                patient.getRespirator().thresholds['expiratory_tidal_volume']['min'],
+                                patient.getRespirator().thresholds['expiratory_tidal_volume']['max']))}">{{patient.getRespirator().expiratory_tidal_volume}}</td>
+                        </ng-template>
+
+                
+                </tr>
+                <tr>
+                        <td>Rate</td><td *ngIf="patient.getRespirator().rate == null ; else zero_rate" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_rate>
+                        <td *ngIf="patient.getRespirator().rate =='0'; else real_rate">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_rate>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().rate,
+                                patient.getRespirator().thresholds['rate']['min'],
+                                patient.getRespirator().thresholds['rate']['max']))}">{{patient.getRespirator().rate}}</td>
+                        </ng-template>
+
+                        <td>Total Rate</td><td *ngIf="patient.getRespirator().total_rate == null ; else zero_rate" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_total_rate>
+                        <td *ngIf="patient.getRespirator().total_rate =='0'; else real_rate">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_total_rate>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().total_rate,
+                                patient.getRespirator().thresholds['total_rate']['min'],
+                                patient.getRespirator().thresholds['total_rate']['max']))}">{{patient.getRespirator().total_rate}}</td>
+                        </ng-template>
+
+
+
+                </tr>
+                <tr>
+
+                        <td>Ppeak</td><td *ngIf="patient.getRespirator().peak_pressure == null ; else zero_peak_pressure" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_peak_pressure>
+                        <td *ngIf="patient.getRespirator().peak_pressure =='0'; else real_peak_pressure">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_peak_pressure>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().peak_pressure,
+                                patient.getRespirator().thresholds['peak_pressure']['min'],
+                                patient.getRespirator().thresholds['peak_pressure']['max']))}">{{patient.getRespirator().peak_pressure}}</td>
+                        </ng-template>
+
+                        <td>I/E Ratio</td><td *ngIf="patient.getRespirator().ie_ratio == null ; else zero_ie_ratio" [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(false)}"><b> - - - - </b></td>
+
+                        <ng-template #zero_ie_ratio>
+                        <td *ngIf="patient.getRespirator().ie_ratio =='0'; else real_ie_ratio">- - - -</td>
+                        </ng-template>
+                
+                        <ng-template #real_ie_ratio>
+                        <td [ngStyle]="{'color':patient.getRespirator().getColorFromBoolean(patient.getRespirator().check_thresholds(
+                                patient.getRespirator().ie_ratio,
+                                patient.getRespirator().thresholds['ie_ratio']['min'],
+                                patient.getRespirator().thresholds['ie_ratio']['max']))}">{{patient.getRespirator().ie_ratio}}</td>
+                        </ng-template>
+                        <!-- <td>Inspiratory Time</td><td *ngIf="patient.getRespirator()">{{patient.getRespirator().inspiratory_time}}</td> -->
+
+                </tr>
+        </ng-template>
+</table>
+
+<!-- ===================================================================== IVAC ======================================================================== -->
+
+<table class="device_table" *ngIf="patient.getIvac()">
+        <tr><td colspan=5><hr class="solid"></td></tr>
+        <div *ngIf="!timeService.checkValidTimestamp(patient.getIvac().getTimestamp()); else regular_ivac_view">
+                <tr><td class='device_header'>Ivac <img src="../../../../../assets/images/ivac.PNG" width="20px" height="20px"></td></tr>
+                <tr class="alert_msg"><td>נתוני ה-Ivac אינם עדכניים</td></tr>
+        </div>
+        <ng-template #regular_ivac_view>
+                <tr><td class='device_header'>IVAC <img *ngIf="patient.getIvac() && timeService.checkValidTimestamp(patient.getIvac().getTimestamp())" src="../../../../../assets/images/connected.png" width="20px" height="20px"></td><td>Infusion Rate</td><td>Vol. Left to Infuse</td><td style="text-align: right;"><img src="../../../../../assets/images/camera.png" width="20px" height="15px" (click)="PopupDeviceImage(patient.getIvac().getDeviceId())"></td></tr>
+
+                <tr>
+                        <td *ngIf="patient.getIvac()">{{patient.getIvac().medication}}</td>
+                
+                        <td *ngIf="patient.getIvac()">{{patient.getIvac().infusion_rate}}</td>
+                                        
+                        <td *ngIf="patient.getIvac()">{{patient.getIvac().volume_left_to_infuse}}</td>
+                        
+                </tr>
+        </ng-template>
+</table>    

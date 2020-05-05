@@ -1,0 +1,79 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'העלאת אפליקציות'" [icon]="'fa-desktop'"></app-page-header>
+
+    <div style="text-align:center; margin-top: 100px; ">
+      <mat-card style="margin-top:10px; width: 50%;">  
+        <h1 class="card-header text-center font-weight-bold text-uppercase py-4">העלאת אפליקציות</h1>
+      <mat-card-content>  
+          <table class="input_table">
+          <tr><td>
+            <mat-form-field>
+              <mat-label>גרסת האפליקציה</mat-label>
+              <input [(ngModel)]="version" matInput placeholder="1.2.3" (input)="onChange()">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>שם האפליקציה</mat-label>
+              <input [(ngModel)]="name" matInput placeholder="MedicView-Setup" (input)="onChange()">
+            </mat-form-field>
+          </td></tr>
+          </table>
+                  <section class="example-section"  *ngFor="let file of files">
+                      <mat-progress-bar
+                          class="example-margin"
+                          color="primary"
+                          mode="determinate"
+                          [value]="file.progress">
+                      </mat-progress-bar>
+                      <span id="file-label">{{file.data.name}}</span>  
+                        -  
+                      <span id="file-progress">{{file.progress}}%</span>  
+                      
+                    </section>                 
+              
+          
+      </mat-card-content>  
+      <mat-card-actions>  
+          <!-- <button mat-raised-button color="accent">Accent</button> -->
+
+          <button mat-raised-button color="green" (click)="onClick()" [disabled]="!valid">  
+              <mat-icon>file_upload</mat-icon>  
+              Upload  
+          </button>  
+          <button mat-raised-button color="warn" (click)="onReset()">  
+              <mat-icon>clear_all</mat-icon>  
+              Reset  
+          </button>  
+      </mat-card-actions>  
+  </mat-card>
+  <input type="file" #fileUpload id="fileUpload" name="fileUpload"  accept="*" style="display:none;" /></div>
+ </div>
+    
+    <div style="text-align:center; margin-top: 100px; ">
+      
+        <mat-card style="margin-top:10px; width: 50%;">
+          <h1 class="card-header text-center font-weight-bold text-uppercase py-4">חיפוש אפליקציות</h1>
+          <mat-form-field>
+            <mat-label>שם האפליקציה</mat-label>
+            <input [(ngModel)]="searchName" matInput placeholder="MedicView" (input)="searchOnChange()">
+          </mat-form-field>
+
+          <table class="table table-bordered table-responsive-md table-striped text-center">
+            <tr>
+              <th class="text-center">#</th>
+              <th class="text-center">Name</th>
+              <th class="text-center">Version</th>
+              <th class="text-center">Delete</th>
+
+            </tr>
+            <tr *ngFor='let curVersion of versionsArray; let id = index'>
+              <td>{{id +1}}</td>
+              <td>{{searchName}}</td>
+              <td><a [href]='getSanitizedUrl(searchName, curVersion) ' target="_blank" rel="noopener noreferrer"> {{curVersion}} </a> </td>
+              <td> <button mat-raised-button color="primary" (click)="removeVersion(searchName, curVersion)">
+                <mat-icon>delete</mat-icon></button></td>
+            </tr>
+            </table>
+        </mat-card>
+    </div>

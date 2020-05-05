@@ -1,0 +1,131 @@
+<div [@routerTransition]>
+<app-page-header [heading]="'Tables'" [icon]="'fa-table'"></app-page-header>
+
+
+
+
+    <!-- Editable table -->
+<div class="card">
+    <h3 class="card-header text-center font-weight-bold text-uppercase py-4">Patients table</h3>
+    <mat-spinner class="spinner" *ngIf="monService.patients_array.length == 0"></mat-spinner>
+    <div class="card-body">
+      <div id="table" class="table-editable">
+        <span class="table-add float-right mb-3 mr-2">
+          <a class="text-success" (click)="add()">
+            <mdb-icon fas icon="plus" size="2x"></mdb-icon>
+          </a>
+        </span>
+        <table class="table table-bordered table-responsive-md table-striped text-center">
+          <tr>
+            <th class="text-center">#</th>
+            <th class="text-center">Patient ID</th>
+            <th class="text-center">Room ID</th>
+            <th class="text-center">Monitor</th>
+            <th class="text-center">Respirator</th>
+            <th class="text-center">Ivac</th>
+            <th class="text-center">Update</th>
+            <th class="text-center">Remove</th>
+            
+          </tr>
+          <tr *ngFor="let patient of monService.patients_array; let id = index">
+            <td *ngIf='patient'>
+                <span>{{id+1}}</span>
+              </td>
+            <td *ngIf='patient'>
+
+                <mat-form-field class="mat-style">
+                    <mat-label class='mat-style' id='{{patient.getPatientId()}}-patientId-label'>{{patient.getPatientId()}}</mat-label>
+                    <input id='{{patient.getPatientId()}}-patientId' matInput placeholder="Ex. 312121233">
+                </mat-form-field>
+            </td>
+            <td>
+                <mat-form-field class="mat-style">
+                    <mat-label class='mat-style'>{{patient.getRoom()}}</mat-label>
+                    <input id='{{patient.getPatientId()}}-roomId' matInput placeholder="Ex. 132">
+                </mat-form-field>
+            </td>
+            <td>
+               
+                    <table class='innerTable'>
+                        <tr *ngIf='patient && patient.hasMonitor()'>
+                        <!-- <td>
+                             <button *ngIf='patient && patient.hasMonitor()' mat-raised-button color="update" (click)="openEditor(patient.getMonitor())">
+                            <mat-icon>edit</mat-icon></button>
+                        </td> -->
+                        <td>
+                                <button  mat-raised-button color="show-qr" (click)="PopupQRCode(patient.getMonitor().getDeviceId())">
+                               <mat-icon>center_focus_weak</mat-icon></button>
+                        </td>
+                        <td>
+                            <button mat-raised-button color="primary" (click)="removeMonitor(patient.getMonitor())">
+                           <mat-icon>delete</mat-icon></button>
+                    </td>
+                    </tr>
+                    </table>
+            </td>
+            <td>
+              
+                <table class='innerTable'>
+                    <tr *ngIf='patient && patient.hasRespirator()'>
+                    <!-- <td>
+                         <button *ngIf='patient && patient.hasMonitor()' mat-raised-button color="update" (click)="openEditor(patient.getMonitor())">
+                        <mat-icon>edit</mat-icon></button>
+                    </td> -->
+                    <td>
+                            <button mat-raised-button color="show-qr" (click)="PopupQRCode(patient.getRespirator().getDeviceId())">
+                           <mat-icon>center_focus_weak</mat-icon></button>
+                    </td>
+                    <td>
+                        <button mat-raised-button color="primary" (click)="removeMonitor(patient.getRespirator())">
+                       <mat-icon>delete</mat-icon></button>
+                </td>
+                </tr>
+                </table>
+
+  
+            </td>
+            <td>
+
+                <table class='innerTable' >
+                    <tr *ngIf='patient && patient.hasIvac()'>
+                    <!-- <td>
+                         <button *ngIf='patient && patient.hasMonitor()' mat-raised-button color="update" (click)="openEditor(patient.getMonitor())">
+                        <mat-icon>edit</mat-icon></button>
+                    </td> -->
+                    <td>
+                            <button  mat-raised-button color="show-qr" (click)="PopupQRCode(patient.getIvac().getDeviceId())">
+                           <mat-icon>center_focus_weak</mat-icon></button>
+                    </td>
+                    <td>
+                        <button  mat-raised-button color="primary" (click)="removeMonitor(patient.getIvac())">
+                       <mat-icon>delete</mat-icon></button>
+                </td>
+                </tr>
+                </table>
+
+            </td>
+            <td>
+
+                <table class='innerTable' >
+                <tr><td>
+                <button mat-raised-button color="update" (click)="update(patient, id)">
+                    <mat-icon>update</mat-icon>
+                </button>
+              </td></tr>
+              </table>
+            </td>
+            <td>
+              <table class='innerTable' >
+                <tr><td>
+                <button mat-raised-button color="primary" (click)="remove(patient,id)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+              </td></tr>
+            </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  </div>

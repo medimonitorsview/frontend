@@ -1,0 +1,29 @@
+::ng-deep .mat-progress-bar-fill::after {
+    
+    background: rgb(85, 162, 221);
+}
+::ng-deep .mat-progress-bar-buffer {
+    background-color: white;
+}
+
+::ng-deep .mat-progress-bar {
+    border-radius: 2px;
+    height: 10px;
+}
+
+.input_table{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mat-green {
+    background-color: green;
+    color: #fff;
+}
+
+mat-card{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;  
+    vertical-align:middle;
+}

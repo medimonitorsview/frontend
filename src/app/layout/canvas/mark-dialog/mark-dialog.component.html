@@ -1,0 +1,16 @@
+
+<mat-label>Select the marked field</mat-label>
+<mat-form-field>
+    <mat-label>Select the marked field</mat-label>
+    <mat-select [(value)]="selected">
+      <mat-option *ngFor="let value of values" [value]="value.value" >
+        {{value.viewValue}}
+      </mat-option>
+    </mat-select>
+    
+  </mat-form-field>
+
+
+    <button mat-raised-button [mat-dialog-close]="selected">Apply</button>
+    <!-- <button mat-raised-button [mat-dialog-close]="unidentify">Cancel</button> -->
+

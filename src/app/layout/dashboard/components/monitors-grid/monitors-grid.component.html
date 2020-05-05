@@ -1,0 +1,33 @@
+<div fxLayout="row" fxLayoutGap="5px" class="flexcontainer">
+            <div gdGap="5px" gdRows="auto auto auto" *ngFor="let patient of monService.patients_array;" class="id_div" [id]='patient.getPatientId()' (click)="openDialog($event)">
+                  <app-monitor-item [patient]="patient" [id]='patient.getPatientId()' >
+                  </app-monitor-item>
+            </div>
+   </div>
+
+<div>
+      <mat-spinner class="spinner" *ngIf="monService.patients_array.length == 0"></mat-spinner>
+</div>
+<div dir="rtl" *ngIf="refused_connection">
+      קיימת בעיית חיבור לשרת.
+      אנא וודאו שכתובת השרת נכונה ושניתן לגשת אליו.
+</div>
+
+
+<!-- 
+
+<mat-grid-list cols="10" rowHeight="4:6" gutterSize='5px' class="=fullWidth">
+      <mat-grid-tile *ngFor="let patient of patients_array; let i = index" [id]='patient.getPatientId()'(click)="openDialog($event)"> 
+   
+
+      <mat-grid-tile-footer>
+                <table class='icons'>
+                        <tr>
+                              <td><img src="../../../../../assets/images/ivac.PNG" width="25px" height="25px"  *ngIf="patient.getIvac() && !patient.getIvac().checkValidTimestamp(10)"></td>
+                              <td><img src="../../../../../assets/images/respirator.PNG" width="25px" height="25px"  *ngIf="patient.getRespirator() && !patient.getRespirator().checkValidTimestamp(10)"></td>
+                              <td><img src="../../../../../assets/images/monitor.PNG" width="25px" height="25px"  *ngIf="patient.getMonitor() && !patient.getMonitor().checkValidTimestamp(10)"></td>
+                        </tr>
+                  </table>
+      </mat-grid-tile-footer>
+      </mat-grid-tile>
+</mat-grid-list> -->
