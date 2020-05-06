@@ -39,8 +39,6 @@ export class MonitorsService{
   
   private async fetchData(){
   try{
-
-  
     const monitorsList = await this.getMonitors()
     if(!monitorsList)
         return

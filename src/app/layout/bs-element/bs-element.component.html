@@ -59,7 +59,7 @@
             <input [(ngModel)]="searchName" matInput placeholder="MedicView" (input)="searchOnChange()">
           </mat-form-field>
 
-          <table class="table table-bordered table-responsive-md table-striped text-center">
+          <table class="table table-bordered table-responsive-md table-striped text-center" *ngIf='versionsArray && versionsArray.length > 0'>
             <tr>
               <th class="text-center">#</th>
               <th class="text-center">Name</th>

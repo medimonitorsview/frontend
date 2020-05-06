@@ -7,9 +7,9 @@ export const environment = {
 };
 
 export const Version = {
-  major:1,
-  minor:1,
-  patch:1
+  major:0,
+  minor:4,
+  patch:3
 }
 
 /*

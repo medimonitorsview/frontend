@@ -48,14 +48,12 @@ export class MonitorsGridComponent implements OnInit, OnDestroy {
   
   public openDialog(event)
   {
-    
     let id = event.target.id
     if (!event.target.id){
-    // Detecting mat-grid-tile id (and not children objects)
+    // Detecting mat-card id (and not children objects)
     let obj = event.target
     let name = obj.className
     let i = 0
-    // while (name != "mat-grid-tile")
     while (name != "mat-card")
     {
       obj = obj.offsetParent

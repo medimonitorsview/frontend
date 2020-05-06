@@ -20,6 +20,7 @@ export class VideoDialogComponent implements OnInit, OnDestroy {
   interval : any
   type: any
   enable_ocr_checkbox : Boolean
+  first_image_loaded: Boolean
   constructor(@Inject(MAT_DIALOG_DATA) private data, public monService: MonitorsService, private http : HttpClient,private sanitizer:DomSanitizer) {
     this.loaded = false
     this.checked = false
@@ -28,7 +29,9 @@ export class VideoDialogComponent implements OnInit, OnDestroy {
     const remoteUrl = data.remoteUrl
     const show_ocr_url = "?show_ocr=true"
     this.enable_ocr_checkbox = false
-    if(this.type == "MonitorImage")
+    this.first_image_loaded = false
+    
+    if(this.type == "MonitorImage") 
     {
      this.enable_ocr_checkbox = true 
     }
@@ -49,6 +52,7 @@ export class VideoDialogComponent implements OnInit, OnDestroy {
               const blob = new Blob([response], {type: 'image/jpg'});
               this.url = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(blob));
               this.loaded = true
+              this.first_image_loaded=true
               },
               err => {this.loaded = false})
  

@@ -4,7 +4,11 @@
     <button class="close" mat-button mat-dialog-close>X</button>
 </div>
 
-<img  class='image' [useCache]="false" [src]="url" *ngIf="loaded">
-<mat-spinner class="spinner" *ngIf="!loaded"></mat-spinner>
-<mat-checkbox class="example-margin" *ngIf="enable_ocr_checkbox" [(ngModel)]="checked">Show OCR</mat-checkbox>
+<img  class='image' [useCache]="false" [src]="url" *ngIf="first_image_loaded">
+<table>
+    <tr>
+        <td width="50%"><mat-checkbox class="example-margin" *ngIf="enable_ocr_checkbox" [(ngModel)]="checked">Show OCR</mat-checkbox></td>
+        <td width="50%"><mat-spinner [diameter]="40" class="spinner" *ngIf="!loaded"></mat-spinner></td>
+</tr>
+</table>
 
