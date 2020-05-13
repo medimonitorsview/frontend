@@ -27,7 +27,6 @@ export class FormComponent implements OnInit {
 
 
 public setServerIp(ip){
-    debugger
     if(this.validateIP(ip)){
         this.monService.setIp(ip)
         console.log("IP address edited successfully to "+this.monService.getIp())  

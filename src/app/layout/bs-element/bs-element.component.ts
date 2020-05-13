@@ -5,6 +5,8 @@ import { map, catchError } from  'rxjs/operators';
 import { MonitorsService } from 'src/app/services/monitors.service';
 import { of } from 'rxjs';
 import {DomSanitizer} from '@angular/platform-browser';
+import { MatSnackBarConfig, MatSnackBar } from '@angular/material/snack-bar';
+import { MessageComponent } from '../message/message.component';
 
 @Component({
     selector: 'app-bs-element',
@@ -28,8 +30,9 @@ export class BsElementComponent implements OnInit {
 
     versionsArray : Array<any>
     valid : Boolean
-    constructor(private monService : MonitorsService) {
+    constructor(private monService : MonitorsService, private snack: MatSnackBar) {
       this.valid = false
+
     }
 
     ngOnInit() {}
@@ -45,6 +48,26 @@ export class BsElementComponent implements OnInit {
                 file.progress = Math.round(event.loaded * 100 / event.total);  
                 break;  
               case HttpEventType.Response:  
+
+                console.log(event)
+                let configSuccess: MatSnackBarConfig = {
+                  panelClass: ['success'],
+                  duration: 5000,
+                  horizontalPosition: 'center',
+                  verticalPosition: 'bottom'
+                };
+
+                if(event.status == 200){
+                 
+                  this.snack.openFromComponent(MessageComponent, {
+                    data: "File uploaded successfully", ...configSuccess
+                  },);
+                }
+                else{
+                  this.snack.openFromComponent(MessageComponent, {
+                    data: "Upload Failed "+event.status+" - "+event.statusText, ...configSuccess
+                  },);
+                }
                 return event;  
             } 
           }),  
@@ -60,12 +83,13 @@ export class BsElementComponent implements OnInit {
 
       private uploadFiles() {  
         this.fileUpload.nativeElement.value = '';  
-        this.files.forEach((file)=> { 
+        this.files.forEach(async (file)=> { 
           this.uploadFile(file);
         })  
     }
 
     onClick() {  
+        this.files = []
         const fileUpload = this.fileUpload.nativeElement;fileUpload.onchange = () => {  
         for (let index = 0; index < fileUpload.files.length; index++)  
         {  
@@ -84,7 +108,20 @@ export class BsElementComponent implements OnInit {
       this.valid = false
   }
     onChange(){
-      
+      if(isNaN(this.version)){
+        
+      let configSuccess: MatSnackBarConfig = {
+        panelClass: ['failed'],
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom'
+      };
+    this.snack.openFromComponent(MessageComponent, {
+        data: " Error - Version must be valid Number", ...configSuccess
+      },);
+        this.valid = false
+        return
+      }
       if((this.name && this.name.length > 0) && (this.version && this.version.length > 0)){
         this.valid = true
       }
@@ -114,7 +151,6 @@ export class BsElementComponent implements OnInit {
     }
 
     async removeVersion(name, version){
-      debugger
       const ret = await this.monService.removeVersion(name, version)
       if(ret)
       {

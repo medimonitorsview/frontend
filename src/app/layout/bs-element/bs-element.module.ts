@@ -13,6 +13,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatInputModule} from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { FormsModule } from '@angular/forms';
             MatProgressBarModule,
             MatButtonModule,
             MatInputModule,
-            FormsModule],
+            FormsModule,
+            MatSnackBarModule],
     declarations: [BsElementComponent]
 })
 export class BsElementModule {}
